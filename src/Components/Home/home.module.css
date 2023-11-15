@@ -1,0 +1,21 @@
+#nav{
+    box-shadow: -5px 0px 10px rgba(201, 203, 212, 0.5), 2px 5px 10px rgba(185, 191, 197, 0.5);
+}
+.main{
+    display: grid;
+    place-content : center;
+    grid-template-columns: 200px 200px; 
+    grid-gap: 0 150px;;
+    margin-top: 10%; 
+    margin-left: -15%;
+}
+.btnm{
+    box-shadow: -5px 0px 10px rgba(201, 203, 212, 0.5), 2px 5px 10px rgba(26, 27, 28, 0.5);
+    border-radius: 10px;
+    border: none;
+    width: 300px;
+    height: 200px;
+    /* margin: 20px; */
+    cursor: pointer;
+
+}
