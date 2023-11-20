@@ -141,6 +141,7 @@ const Home = () => {
     <Container fluid className={styles.main}>
       <div style={{ display: "flex", height: "87vh", overflow: "scroll initial" }}>
         <div>
+          <p>Hellooo</p>
           <button onClick={toggleMenu}>Toggle Collapse</button>
           <div style={{ width: isMenuCollapsed ? '50px' : '200px', transition: 'width 0.3s' }}>
             <Menu>
