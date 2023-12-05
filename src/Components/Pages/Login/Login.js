@@ -35,7 +35,7 @@
               if (data.status == 'ok') {
                 onLogin(data);
                 setislogin(true);
-                navigate('/home');
+                // navigate('/home');
               } else {
                 // Handle invalid credentials here
                 console.log('Invalid credentials');

@@ -1,0 +1,45 @@
+
+body{
+    background-image: none;
+}
+
+
+  .main{
+    display: grid;
+    place-content: center;
+    grid-template-columns:0.05fr 1fr;
+    grid-template-rows:0.1fr;    
+    padding: 0;
+
+  }
+  .mainr{
+    height: 95vh;
+    width: 100%;
+    display: grid;
+    padding: 0;
+    grid-template-columns: 2fr;
+    grid-template-rows:0.2fr 2fr;
+  }
+  
+  .collapsed {
+    width: 40px;
+    transition: width 0.5s ease-in;
+  }
+    
+  .expanded {
+    width: 200px;
+    transition: width 0.5s ease-out;
+  }
+  .header{
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  .std{
+    display: flex;
+    margin-left: 5px;
+    margin-right: 20px;
+    border-radius: 20px;
+    background-color: whitesmoke;
+
+
+  }
