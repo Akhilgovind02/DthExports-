@@ -15,9 +15,9 @@
 
         useEffect(() => {
           if (islogin) {
-            navigate('/home');
+            navigate('/dashboard');
           }
-        }, [islogin, navigate]);
+        });
 
         const handleLogin = () => {
           // console.log('this is handle login');
@@ -32,7 +32,7 @@
             .then((response) => response.json())
             .then((data) => {
               console.log(data);
-              if (data.status == 'ok') {
+              if (data.status === 'ok') {
                 onLogin(data);
                 setislogin(true);
                 // navigate('/home');
@@ -47,14 +47,11 @@
             });
         };
 
-
-        
         return (
           <div>
             <Container fluid className="main">
               <Row className="row">
                 <Col className="col1">
-                
                     <Row  sm="12" md="10" lg="3" className="row1">
                     <Image className="logo" src={Logo}></Image>
                     </Row>

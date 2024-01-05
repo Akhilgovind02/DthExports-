@@ -8,9 +8,8 @@ body{
     display: grid;
     place-content: center;
     grid-template-columns:0.05fr 1fr;
-    grid-template-rows:0.1fr;    
+    grid-template-rows:0.1fr ;    
     padding: 0;
-
   }
   .mainr{
     height: 95vh;
@@ -21,15 +20,7 @@ body{
     grid-template-rows:0.2fr 2fr;
   }
   
-  .collapsed {
-    width: 40px;
-    transition: width 0.5s ease-in;
-  }
-    
-  .expanded {
-    width: 200px;
-    transition: width 0.5s ease-out;
-  }
+  
   .header{
     margin-left: 10px;
     margin-top: 10px;

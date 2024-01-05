@@ -1,31 +1,31 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import React from "react";
+
 import { Container, Image } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import logo from "./dthLogo.png";
+import logo from "../../../../Assets/dthLogo.png";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import styles from "../Styles/HomeS/home.module.css";
-import Incoming from "../Pages/Incoming/IncomingCheck";
-import Header from "../header/header";
-import IncomingCheck from "../Pages/Incoming/IncomingCheck";
-import { useNavigate } from 'react-router-dom';
+import styles from '../../../../styles/Sidebar/sidebar.module.css'
+import { useNavigate,Link } from "react-router-dom";
+import IncomingForm from '../../../Forms/IncomingForm'
 
-
-const Sidebar = () => {
+function Sidebar() {
   const navigate = useNavigate();
   const [isMenuCollapsed, setMenuCollapsed] = useState(false);
-  const [hide, Sethide] = useState(true);
-
-  const toCheck = () => {
-    Sethide(!hide)
-    navigate('/incomingcheck')
-  }
+  // const[check,setCheck] = useState('');
+  const toCheck = () => { 
+    // navigate('/home')
+    // <Link to='/incomingcheck'></Link>
+    // props.value = 'check'
+    // setCheck("hello")
+    // return check;
+  };
 
   const toggleMenu = () => {
     setMenuCollapsed(!isMenuCollapsed);
   };
 
   return (
-    <Container fluid className={styles.main}>
+    <Container fluid >
       <div
         style={{ display: "flex", height: "87vh", overflow: "scroll initial" }}
       >
@@ -45,14 +45,20 @@ const Sidebar = () => {
           </button>
           <div className={isMenuCollapsed ? styles.collapsed : styles.expanded}>
             <Menu>
-              {!isMenuCollapsed && <MenuItem> Dashboard </MenuItem>}
+              {!isMenuCollapsed && 
+              <Link style={{textDecoration:'none', color:'black'}} to='/dashboard'>
+              <MenuItem> Dashboard </MenuItem>
+              </Link>
+              }
               <SubMenu label="Standard">
                 {!isMenuCollapsed && (
                   <>
                     <SubMenu label="Incoming">
                       {!isMenuCollapsed && (
                         <>
-                          <MenuItem onClick={toCheck}> Check </MenuItem>
+                          <Link style={{textDecoration:'none', color:'black'}} to='/dashboard/incomingForm'>
+                            <MenuItem > Check </MenuItem>
+                          </Link>
                           <MenuItem> Accept </MenuItem>
                         </>
                       )}
@@ -77,7 +83,6 @@ const Sidebar = () => {
                     <MenuItem> RCL - ADD </MenuItem>
                     <MenuItem> RCL - Day Start </MenuItem>
                     <MenuItem> RCL - Day End </MenuItem>
-
                   </>
                 )}
               </SubMenu>{" "}
@@ -85,24 +90,8 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <div className={styles.mainr}>
-        <div className={styles.header}>
-          <Header />
-        </div>
-        <div className={styles.std}>
-          <div hidden ={hide}>
-            <IncomingCheck />
-          </div>
-        </div>
-
-        {/* <footer
-          style={{ height: "61px" }}
-
-          className="bg-dark navbar-dark"
-        ></footer> */}
-      </div>
     </Container>
   );
-};
+}
 
 export default Sidebar;

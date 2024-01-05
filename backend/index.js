@@ -1,6 +1,3 @@
-
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -22,48 +19,90 @@ mongoose.connect('mongodb://localhost:27017/DTH', { useNewUrlParser: true, useUn
 app.use(bodyParser.json());
 
 // Create a predefined user and save it to the database
+
 const createPredefinedUser = async () => {
-  // const existingUser = {}
   try {
-    if(User == null){
-      const hash_password = bcrypt.hashSync(123456, 10);
-      const existingUser = await User.create({ first_name:"Akhil", email: 'akhil@demo.com', phone:'9977474', password:hash_password, status:1 });
-      await existingUser.save();
+    const user = await User.findOne({ email: 'roy@demo.com' }).exec();
+
+    if (user) {
+      console.log('User found:', user);
+    } else {
+      const hashPassword = bcrypt.hashSync('123456', 10);
+      console.log(hashPassword);
+
+      // Use User.create to both create and save the user in the database
+      const existingUser = await User.create({
+        first_name: "Roy",
+        email: 'roy@demo.com',
+        phone: '7474738',
+        password: hashPassword,
+        status: 1
+      });
+
       console.log('Predefined user created and saved to the database');
     }
-    else{
-      console.log("user already exists");
-    }
-    
   } catch (error) {
-    console.error('Error creating predefined user:', error);
-  };
+    console.error('Error:', error);
+  }
 };
+
 // Invoke the function to create the predefined user
 createPredefinedUser();
 
 app.post('/login', async (req, res) => {
 
 console.log(User);
-  // try {
       try {
-        const user = await User.findOne({ email: req.body.email, password: req.body.password });
+        const user = await User.findOne({ email: req.body.email});
     
         if (user) {
-          const token = jwt.sign(
-            {
-              email:user.email,
-
-            },'secretkey')
-          return res.json({ status: 'ok', user: user.email });
-        } else {
+          const enteredPassword = req.body.password;
+          const passwordMatch = await bcrypt.compare(enteredPassword, user.password);
+          if(passwordMatch){
+            return res.json({ status: 'ok', user: user.email });
+          }
+          else{
+            return res.status(401).send("Wrong Password");
+          }
+        }
+        else {
           return res.json({ status: 'not ok', user: false });
         }
       } catch (error) {
         console.error('Error during login:', error);
         return res.status(500).json({ status: 'error', message: 'Internal server error' });
       }
+  
+   
+  });
+
+  
+  app.get('/incomingcheck', async (req,res) =>{
+    try{
+    const currentDate = new Date();
+    const formattedDateTime = `${currentDate.getFullYear()%100}${currentDate.getMonth() + 1}${currentDate.getDate()}${currentDate.getHours()}${currentDate.getSeconds()}`;
+    console.log(formattedDateTime);
+    const uniqueBatchCode = `B_${formattedDateTime}`;
+    return res.json({ "batchcode":uniqueBatchCode});
+    }catch{
+      return res.status(422).send("Invalid Venue Code")
+    }
     
+  });
+
+  app.post('/recievecheck',(req,res) => {
+    const checkdata = {
+      vendorCode:req.body.body.VC,
+      batchCode:req.body.body.batchcode,
+      venue:req.body.body.venue,
+      quantityChecked:req.body.body.TQC,
+      teamName:req.body.body.team,
+      status:1,
+      updatedAt:Date.now,
+    }
+    console.log(checkdata);
+    console.log("reqqqq",req.body.body);
   })
+
 
 app.listen(port, () => console.log('Server is running'));
