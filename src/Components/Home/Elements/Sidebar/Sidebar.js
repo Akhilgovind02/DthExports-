@@ -59,7 +59,9 @@ function Sidebar() {
                           <Link style={{textDecoration:'none', color:'black'}} to='/dashboard/incomingForm'>
                             <MenuItem > Check </MenuItem>
                           </Link>
+                          <Link style={{textDecoration:'none', color:'black'}} to='/dashboard/accept'>
                           <MenuItem> Accept </MenuItem>
+                          </Link>
                         </>
                       )}
                     </SubMenu>{" "}

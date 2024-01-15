@@ -12,7 +12,8 @@
     // import IncomingCheck from './Components/Pages/Incoming/IncomingCheck';
 import IncomingForm from './Components/Forms/IncomingForm';
 import Dashboard from './Components/Home/Elements/Content/Dashboard';
-import Root from './Components/Root/Root';
+import Acceptform from './Components/Forms/Acceptform';
+import Root from './Components/Root/Root'
     function App  () {
       const [user, setUser] = useState(null);
 
@@ -41,12 +42,20 @@ import Root from './Components/Root/Root';
             element:<Dashboard/>,
             children:[{
               path:'/dashboard/incomingForm',
-              element:<IncomingForm />
-            }]
+              element:<IncomingForm />,
+            },
+            {
+            path:'/dashboard/accept',
+            element:<Acceptform />
+            }
+          ],
+
+            // children:[{
+            //   path:'/dashboard/accept',
+            //   element:<Acceptform />
+            // }]
           }
         ]
-
-        
       }
     ]);
  

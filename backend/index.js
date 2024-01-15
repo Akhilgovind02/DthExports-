@@ -5,6 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./Models/user_model');
+const check = require('./Models/Item_Check')
 
 const app = express();
 const port = 2500;
@@ -53,6 +54,7 @@ app.post('/login', async (req, res) => {
 
 console.log(User);
       try {
+        console.log(req.body);
         const user = await User.findOne({ email: req.body.email});
     
         if (user) {
@@ -82,6 +84,7 @@ console.log(User);
     const currentDate = new Date();
     const formattedDateTime = `${currentDate.getFullYear()%100}${currentDate.getMonth() + 1}${currentDate.getDate()}${currentDate.getHours()}${currentDate.getSeconds()}`;
     console.log(formattedDateTime);
+
     const uniqueBatchCode = `B_${formattedDateTime}`;
     return res.json({ "batchcode":uniqueBatchCode});
     }catch{
@@ -90,19 +93,25 @@ console.log(User);
     
   });
 
-  app.post('/recievecheck',(req,res) => {
-    const checkdata = {
-      vendorCode:req.body.body.VC,
-      batchCode:req.body.body.batchcode,
-      venue:req.body.body.venue,
-      quantityChecked:req.body.body.TQC,
-      teamName:req.body.body.team,
-      status:1,
-      updatedAt:Date.now,
+  app.post('/recievecheck', async (req,res) =>  {
+    try{
+      const checkdata = req.body.body
+     await check.create({
+      vendorCode: checkdata.VC,
+      batchCode: checkdata.batchcode,
+      venue: checkdata.venue,
+      quantityChecked: checkdata.TQC,
+      teamName: checkdata.team,
+      status: 1,
+      updatedAt:checkdata.updatedAt
+    });
+    console.log("Check data received and saved to mongoDB")
+    } catch {
+      console.log('Check data not recieved')
     }
-    console.log(checkdata);
-    console.log("reqqqq",req.body.body);
   })
+
+  
 
 
 app.listen(port, () => console.log('Server is running'));
