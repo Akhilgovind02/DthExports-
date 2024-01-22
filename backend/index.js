@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./Models/user_model');
 const check = require('./Models/Item_Check')
+const Accept = require('./Models/item_accept_temp')
+const Acceptperm = require('./Models/item_accept_perm')
 
 const app = express();
 const port = 2500;
@@ -78,7 +80,9 @@ console.log(User);
    
   });
 
-  
+
+  // item_check_start
+
   app.get('/incomingcheck', async (req,res) =>{
     try{
     const currentDate = new Date();
@@ -111,6 +115,126 @@ console.log(User);
     }
   })
 
+  // item_check_end
+
+
+
+  // item_accept_start
+
+
+  
+
+  app.get('/bctoaccept' ,async(req,res) => {
+    try{
+      
+      let BCdata = await check.find({ toAccept:0})
+      if(BCdata[0].toAccept==0){
+
+      const sortedBC = BCdata.sort((a, b) => a.createdAt - b.createdAt);
+      let BC = sortedBC[0].batchCode
+      console.log("sortedBC",sortedBC);
+      let BNdata = await Accept.find({batchCode:BC})
+      let BND = [];
+      let length = BNdata.length;
+      for(i=0;i<length;i++){
+        BND.push(BNdata[i].boxRef);
+      }
+      console.log(BND);
+
+
+      // if(!BNdata){
+      //   res.json({"message":"No Items in queue for acceptance"})
+      // }
+      // else{
+      //   let BN= BNdata[0].boxRef
+      //   res.json(BN);
+      // }
+      if(!BC){
+        res.send('No Item To Accept')
+        }
+        else{
+          if(BNdata.length<1){
+            console.log('NO box number')
+          }
+          else{
+          return res.json([{'AcceptBC':BC},{'BoxNumber':BND}])
+          }
+         
+          return res.json([{'AcceptBC':BC}])
+      }
+    }
+    else{
+      res.send('No batchcode to add')
+    }
+    }catch(error){
+        res.status(400).send(error);
+    }
+    })
+  
+  app.post('/itemaccept', async (req,res) => {
+    try{
+    var acceptData= req.body.body;
+    console.log(acceptData)
+    await Accept.create({
+      batchCode : acceptData.Bactcode,
+      boxRef:acceptData.BoxNumber,
+      sizeRef:acceptData.Box_size,
+      colorRef:acceptData.Box_colour,
+      textureRef:acceptData.Box_texture,
+      materialQty:acceptData.MaterialQuantity,
+      imagePath:acceptData.Image,
+      process:acceptData.process,
+      updatedAt:acceptData.UpdatedAt,
+    })
+
+    }catch(error){
+      console.log('Error in accepting the item : ', error);
+    }
+    
+    
+  })
+
+  // item_accept_end
+
+
+  // main submit start
+
+  app.post('/toacceptperm', async(req,res) => {
+    try{
+      var acceptData= req.body.body;
+      await Accept.create({
+        batchCode : acceptData.Bactcode,
+        boxRef:acceptData.BoxNumber,
+        sizeRef:acceptData.Box_size,
+        colorRef:acceptData.Box_colour,
+        textureRef:acceptData.Box_texture,
+        materialQty:acceptData.MaterialQuantity,
+        imagePath:acceptData.Image,
+        process:acceptData.process,
+        updatedAt:acceptData.UpdatedAt,
+      })
+
+      AcceptCollection = Accept.collection
+      const documentsToCopy = await AcceptCollection.find({}).toArray();
+      console.log("documentdata",documentsToCopy);
+
+      await Acceptperm.insertMany(documentsToCopy)
+
+      let BCdata = check.find({batchCode:acceptData.Bactcode})
+      await check.findOneAndUpdate({batchCode:acceptData.Bactcode},{$set:{toAccept:1}})
+
+
+      await Accept.deleteMany({});
+      // console.log("bcdata",BCdata)
+
+
+      }catch(error){
+        console.log('Error in accepting the item : ', error);
+      }
+      
+  })
+
+  //main submit end
   
 
 

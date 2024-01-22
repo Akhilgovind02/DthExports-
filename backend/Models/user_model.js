@@ -51,24 +51,11 @@ const User = mongoose.model('User', userSchema);
 module.exports = User;
 
 
-// // AcceptTemps Model:
+// AcceptTemps Model:
 
-// const acceptTempSchema = new mongoose.Schema({
-//   batchCode: { type: String, required: true },
-//   boxRef: { type: String, required: true },
-//   sizeRef: { type: String, required: true },
-//   colorRef: { type: String, required: true },
-//   textureRef: { type: String, required: true },
-//   materialQty: { type: Number, required: true },
-//   imagePath: { type: String, required: true },
-//   process: { type: String, required: true },
-//   createdAt: { type: Date, default: Date.now },
-//   updatedAt: { type: Date, default: null },
-// });
 
-// const AcceptTemp = mongoose.model('AcceptTemp', acceptTempSchema);
 
-// module.exports = AcceptTemp;
+
 
 // //BoxSettings Model:
 
@@ -120,7 +107,7 @@ module.exports = User;
   
 //   module.exports = FailedJob;
 
-//   //ItemAccepts Model:
+//   ItemAccepts Model:
 
 //   const itemAcceptSchema = new mongoose.Schema({
 //     batchCode: { type: String, required: true },
