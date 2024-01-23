@@ -238,4 +238,27 @@ console.log(User);
   
 
 
+  //Day start begin
+
+  app.get('/daystart',async (req,res) => {
+    try{
+    let batchdata = await Acceptperm.find({})
+    let BND = [];
+    let batchcode = [];
+    let length = batchdata.length;
+    for(i=0;i<length;i++){
+      BND.push(batchdata[i].boxRef);
+      batchcode.push(batchdata[i].batchCode);
+    };
+    let newBatchdata = batchdata.map(element => `${element.boxRef}:${element.batchCode}`);
+
+    console.log(newBatchdata);
+
+    }catch{
+      console.log('Error in getting data from database');
+    }
+   });
+
+  //Day start end
+
 app.listen(port, () => console.log('Server is running'));

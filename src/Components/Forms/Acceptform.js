@@ -64,6 +64,7 @@ function Acceptform() {
         console.log(response.data);
         setBatchcode(response.data[0].AcceptBC);
         if(response.data.length>1){
+          
           setExistBN(response.data[1].BoxNumber)
         }
         else{

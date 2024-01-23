@@ -6,8 +6,6 @@ import logo from "../../../../Assets/dthLogo.png";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import styles from '../../../../styles/Sidebar/sidebar.module.css'
 import { useNavigate,Link } from "react-router-dom";
-import IncomingForm from '../../../Forms/IncomingForm'
-
 function Sidebar() {
   const navigate = useNavigate();
   const [isMenuCollapsed, setMenuCollapsed] = useState(false);
@@ -68,7 +66,9 @@ function Sidebar() {
                     <SubMenu label="Production">
                       {!isMenuCollapsed && (
                         <>
+                          <Link style={{textDecoration:'none', color:'black'}} to='/dashboard/daystart'>
                           <MenuItem> Day Start </MenuItem>
+                          </Link>
                           <MenuItem> Day End </MenuItem>
                         </>
                       )}
