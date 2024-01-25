@@ -8,6 +8,7 @@ const User = require('./Models/user_model');
 const check = require('./Models/Item_Check')
 const Accept = require('./Models/item_accept_temp')
 const Acceptperm = require('./Models/item_accept_perm')
+const ProdBCBN_temp = require('./Models/prod_BC_BN_temp')
 
 const app = express();
 const port = 2500;
@@ -146,7 +147,7 @@ console.log(User);
       //   res.json({"message":"No Items in queue for acceptance"})
       // }
       // else{
-      //   let BN= BNdata[0].boxRef
+      //   let BN = BNdata[0].boxRef
       //   res.json(BN);
       // }
       if(!BC){
@@ -242,17 +243,23 @@ console.log(User);
 
   app.get('/daystart',async (req,res) => {
     try{
-    let batchdata = await Acceptperm.find({})
-    let BND = [];
-    let batchcode = [];
-    let length = batchdata.length;
-    for(i=0;i<length;i++){
-      BND.push(batchdata[i].boxRef);
-      batchcode.push(batchdata[i].batchCode);
-    };
-    let newBatchdata = batchdata.map(element => `${element.boxRef}:${element.batchCode}`);
+    let batchdata = await Acceptperm.find({toProduction:0})
+    if(batchdata[0].toProduction == 0){
+    const sortedBC = batchdata.sort((a, b) => a.createdAt - b.createdAt);
+      let BC = sortedBC[0].batchCode
+      console.log("BC",BC)
+      // console.log("sortedBC",sortedBC);
+      let BNdata = await Acceptperm.find({batchCode:BC,finishBox:0})
+      const sortedBNdata = BNdata.sort((a,b) => a.createdAt - b.createdAt)
+      // console.log("BNdata",BNdata);
+      let BND = [];
+      let length = sortedBNdata.length;
+      for(i=0;i<length;i++){
+        BND.push(sortedBNdata[i].boxRef);
+      }
+      console.log(BND);
+    }
 
-    console.log(newBatchdata);
 
     }catch{
       console.log('Error in getting data from database');

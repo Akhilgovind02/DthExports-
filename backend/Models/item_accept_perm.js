@@ -11,6 +11,8 @@ const accceptpermschema = new mongoose.Schema({
   imagePath: { type: String, required: true },
   process: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  toProduction : {type : String, default:0},
+  finishBox : {type:String,default:0},
   updatedAt: { type: String, default: null },
 });
 

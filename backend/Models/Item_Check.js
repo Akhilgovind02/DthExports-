@@ -1,6 +1,5 @@
   //ItemChecks Model
-const { type } = require('@testing-library/user-event/dist/type');
-const mongoose = require('mongoose')
+  const mongoose = require('mongoose')
   const itemCheckSchema = new mongoose.Schema({
     vendorCode: { type: String, required: true },
     batchCode: { type: String, required: true },
