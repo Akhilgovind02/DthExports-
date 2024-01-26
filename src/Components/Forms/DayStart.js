@@ -20,6 +20,9 @@ function Daystart() {
     const [hid,setHid] = useState(true)
     const [team,setTeam] = useState([])
     const [process,SetProcess] = useState('')
+    const [boxNdata,setBoxNdata] = useState([])
+    const [BoxNoCurrentData,setBoxNoCurrentData] =useState([])
+
 
     const[base64image,setBase64image] = useState(null);
 
@@ -28,11 +31,10 @@ function Daystart() {
 
     const option = [];
 
-    for (let i = 1; i <= 99; i++) {
-      if (!ExistBN.includes(i)) {
-        option.push(<option key={i} value={i}>{i}</option>);
+    for (let i = 0; i <= ExistBN.length-1; i++) {
+        option.push(<option key={ExistBN[i]} value={ExistBN[i]}>{ExistBN[i]}</option>);
       }
-    }
+    
 
     const webcamRef = useRef(null)
     const[image,setImage] = useState(null)
@@ -69,7 +71,10 @@ function Daystart() {
           },
         })
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
+          setBatchcode(response.data[0].AcceptBC);
+          setExistBN(response.data[1].BoxNumber);
+          setBoxNdata(response.data[2].BNDdata)
           
         })
         .catch((error) => {
@@ -80,6 +85,47 @@ function Daystart() {
       useEffect(() => {
         getBatchCode();
       }, []);
+
+
+      const get_BN_data = () => {
+      for(let i=0;i<boxNdata.length;i++){ 
+        if(boxNdata[i].boxRef == BN){
+        setBoxNoCurrentData([boxNdata[i]])
+       }
+      }}
+      console.log(BoxNoCurrentData)
+
+
+
+      const postBatchcode = () => {
+        axios
+        .post("http://localhost:2500/daystartpost", {
+          headers: {
+            "Content-Type": "application/text",
+          },
+          body:{
+            'Batch_Code' : batchCode,
+            'Box_No' : BN,
+            'Process_' : process,
+            'workers':team,
+            'material_qty':material_qty,
+            'image':image
+          }
+        })
+        .then((response) => {
+          console.log(response.data);
+          setBatchcode(response.data[0].AcceptBC);
+          setExistBN(response.data[1].BoxNumber)
+          
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          // setError("Error fetching data:");
+        });
+      }
+
+
+
 
 
   return (
@@ -101,6 +147,7 @@ function Daystart() {
             <Form.Group as={Col} controlId="formGridVenue">
               <Form.Label>Box Number</Form.Label>
               <Form.Select
+              onClick={get_BN_data}
                 onChange={(e) => setBN(e.target.value) }
                 defaultValue={BN}
               >
@@ -117,6 +164,25 @@ function Daystart() {
                 defaultValue='Raw Material'
               />
             </Form.Group>
+          </Row>
+          <Row>
+           {
+            BoxNoCurrentData ? (
+                BoxNoCurrentData.map((BoxNoCurrentData) => {
+                  return (
+                    <div>
+                      Box Color : {BoxNoCurrentData.colorRef}
+                      Material Quantity : {BoxNoCurrentData.materialQty}
+                      Process : {BoxNoCurrentData.process}
+                      Box Sixe : {BoxNoCurrentData.sizeRef}
+                      Box texture : {BoxNoCurrentData.textureRef}
+                    </div>
+                  )
+                })
+            ):(
+              <></>
+            )
+           }
           </Row>
           <Row>
           <Row style={{marginTop:'-20px'}} className="mb-2 ">
@@ -216,7 +282,7 @@ function Daystart() {
 
       <Row className='mx-5 my-2'>
        
-        <Button onClick={''} as={Col} className='mt-2 mx-1'>
+        <Button onClick={postBatchcode} as={Col} className='mt-2 mx-1'>
           Submit  
         </Button>
       </Row>

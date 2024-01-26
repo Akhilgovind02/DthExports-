@@ -291,4 +291,4 @@ function Acceptform() {
   )
 }
 
-export default Acceptform
+export default Acceptform;

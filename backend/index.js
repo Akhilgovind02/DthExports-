@@ -258,11 +258,44 @@ console.log(User);
         BND.push(sortedBNdata[i].boxRef);
       }
       console.log(BND);
+
+      let BNwithdata = await Acceptperm.find({boxRef:BND,batchCode:BC})
+      console.log(BNdata)
+
+
+    
+
+    if(!BC){
+      res.send('No Item To Accept')
+      }
+      else{
+        if(BNdata.length<1){
+          console.log('NO box number')
+        }
+        else{
+        return res.json([{'AcceptBC':BC},{'BoxNumber':BND},{'BNDdata':BNwithdata}])
+        }
+       
+        return res.json([{'AcceptBC':BC}])
     }
+  }
+  else{
+    res.send('Please Wait For The Next Day');
+  }
 
 
     }catch{
       console.log('Error in getting data from database');
+    }
+   });
+
+
+
+   app.post('/daystartpost',(req,res) => {
+    try{
+      const daystartData = req.body
+    }catch{
+      console.log('error in post request')
     }
    });
 
