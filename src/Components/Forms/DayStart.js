@@ -11,6 +11,7 @@ import {
   } from "react-bootstrap";
 import axios from 'axios';
 import { useTransition } from 'react';
+import { resolveObjectURL } from 'buffer';
 function Daystart() {
 
     const[BN,setBN] = useState('Select Box Number...');
@@ -19,7 +20,24 @@ function Daystart() {
     const [ExistBN,setExistBN]  = useState([])
     const [hid,setHid] = useState(true)
     const [team,setTeam] = useState([])
-    const [process,SetProcess] = useState('')
+
+
+    const steps = [
+      'OPENING',
+      'WASHING',
+      'QUALITY CHECK 2nd',
+      'HACKLING',
+      'CLEANING',
+      'CLEANING QUALITY CHECK',
+      'SHORT REMOVAL',
+      'HEAD PERFECTIONING',
+      'SIZING AND TRIMMING',
+      'STACKING - FINISHED'
+    ];
+
+
+    const [procesBefore,SetProcessBefore]  = useState()
+    const [process,SetProcess] = useState(steps[0])
     const [boxNdata,setBoxNdata] = useState([])
     const [BoxNoCurrentData,setBoxNoCurrentData] =useState([])
 
@@ -74,7 +92,8 @@ function Daystart() {
           console.log(response.data);
           setBatchcode(response.data[0].AcceptBC);
           setExistBN(response.data[1].BoxNumber);
-          setBoxNdata(response.data[2].BNDdata)
+          setBoxNdata(response.data[2].BNDdata);
+          SetProcessBefore(response.data[4].ProcessBefore)
           
         })
         .catch((error) => {
@@ -114,8 +133,7 @@ function Daystart() {
         })
         .then((response) => {
           console.log(response.data);
-          setBatchcode(response.data[0].AcceptBC);
-          setExistBN(response.data[1].BoxNumber)
+       
           
         })
         .catch((error) => {
@@ -125,6 +143,33 @@ function Daystart() {
       }
 
 
+      const postprocess = () => {
+        axios
+        .post("http://localhost:2500/getprocess", {
+          headers: {
+            "Content-Type": "application/text",
+          },
+          body:{
+            'Process_' : process
+          }
+        })
+        .then((response) => {
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          // setError("Error fetching data:");
+        });
+      }
+
+      useEffect(() => {
+        postprocess();
+      }, []);
+
+
+     
+      for (let i=0;i<steps.length;i++){
+        
+      }
 
 
 
@@ -161,28 +206,36 @@ function Daystart() {
               <Form.Control
                 onChange={(e) => SetProcess(e.target.value)}
                 type="process"
-                defaultValue='Raw Material'
+                value={
+                  procesBefore ?(
+                    procesBefore
+                  ):(
+                    process
+                  )
+                }
               />
             </Form.Group>
           </Row>
           <Row>
+            <ul>
            {
             BoxNoCurrentData ? (
                 BoxNoCurrentData.map((BoxNoCurrentData) => {
                   return (
-                    <div>
+                    <li>
                       Box Color : {BoxNoCurrentData.colorRef}
                       Material Quantity : {BoxNoCurrentData.materialQty}
                       Process : {BoxNoCurrentData.process}
                       Box Sixe : {BoxNoCurrentData.sizeRef}
                       Box texture : {BoxNoCurrentData.textureRef}
-                    </div>
+                    </li>
                   )
                 })
             ):(
               <></>
             )
            }
+           </ul>
           </Row>
           <Row>
           <Row style={{marginTop:'-20px'}} className="mb-2 ">

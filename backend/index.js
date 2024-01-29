@@ -8,6 +8,7 @@ const User = require('./Models/user_model');
 const check = require('./Models/Item_Check')
 const Accept = require('./Models/item_accept_temp')
 const Acceptperm = require('./Models/item_accept_perm')
+const ProcesTemp = require('./Models/daystart_temp');
 const ProdBCBN_temp = require('./Models/prod_BC_BN_temp')
 
 const app = express();
@@ -241,6 +242,22 @@ console.log(User);
 
   //Day start begin
 
+
+
+  app.post('/getprocess', async (req,res) => {
+    try{
+      const Cprocess = req.body.body.Process_
+      await ProcesTemp.create({
+      currentprocess:Cprocess
+     })      
+    }catch{
+      console.log('error in process post request')
+    }
+   })
+
+
+
+
   app.get('/daystart',async (req,res) => {
     try{
     let batchdata = await Acceptperm.find({toProduction:0})
@@ -253,17 +270,19 @@ console.log(User);
       const sortedBNdata = BNdata.sort((a,b) => a.createdAt - b.createdAt)
       // console.log("BNdata",BNdata);
       let BND = [];
+      let mQTY = []
       let length = sortedBNdata.length;
       for(i=0;i<length;i++){
         BND.push(sortedBNdata[i].boxRef);
+        mQTY.push(sortedBNdata[i].materialQty)
       }
-      console.log(BND);
+      console.log(mQTY);
 
-      let BNwithdata = await Acceptperm.find({boxRef:BND,batchCode:BC})
-      console.log(BNdata)
+      const prevProcess = await ProcesTemp.find()
 
+      let BNwithdata = await Acceptperm.find({boxRef:BND,batchCode:BC,materialQty:mQTY});
+      // console.log(BNdata)
 
-    
 
     if(!BC){
       res.send('No Item To Accept')
@@ -273,7 +292,7 @@ console.log(User);
           console.log('NO box number')
         }
         else{
-        return res.json([{'AcceptBC':BC},{'BoxNumber':BND},{'BNDdata':BNwithdata}])
+        return res.json([{'AcceptBC':BC},{'BoxNumber':BND},{'BNDdata':BNwithdata},{'Quantity':mQTY},{'ProcessBefore':prevProcess[0].currentprocess}])
         }
        
         return res.json([{'AcceptBC':BC}])
@@ -291,9 +310,13 @@ console.log(User);
 
 
 
+ 
+
+
    app.post('/daystartpost',(req,res) => {
     try{
-      const daystartData = req.body
+
+
     }catch{
       console.log('error in post request')
     }
