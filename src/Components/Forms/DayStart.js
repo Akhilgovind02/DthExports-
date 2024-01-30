@@ -116,7 +116,7 @@ function Daystart() {
 
 
 
-      const postBatchcode = () => {
+      const postdaystart = () => {
         axios
         .post("http://localhost:2500/daystartpost", {
           headers: {
@@ -335,7 +335,7 @@ function Daystart() {
 
       <Row className='mx-5 my-2'>
        
-        <Button onClick={postBatchcode} as={Col} className='mt-2 mx-1'>
+        <Button onClick={postdaystart} as={Col} className='mt-2 mx-1'>
           Submit  
         </Button>
       </Row>

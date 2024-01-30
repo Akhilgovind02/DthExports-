@@ -14,6 +14,7 @@ import IncomingForm from "./Components/Forms/IncomingForm";
 import Dashboard from "./Components/Home/Elements/Content/Dashboard";
 import Acceptform from "./Components/Forms/Acceptform";
 import Root from "./Components/Root/Root";
+import Dayend from "./Components/Forms/Dayend";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -52,6 +53,10 @@ function App() {
             {
               path: "/dashboard/daystart",
               element:<Daystart />
+            },
+            {
+              path:"/dashboard/dayend",
+              element : <Dayend />
             },
           ],
         },

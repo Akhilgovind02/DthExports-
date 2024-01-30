@@ -69,7 +69,9 @@ function Sidebar() {
                           <Link style={{textDecoration:'none', color:'black'}} to='/dashboard/daystart'>
                           <MenuItem> Day Start </MenuItem>
                           </Link>
+                          <Link style={{textDecoration:'none', color:'black'}} to='/dashboard/dayend'>
                           <MenuItem> Day End </MenuItem>
+                          </Link>
                         </>
                       )}
                     </SubMenu>{" "}
