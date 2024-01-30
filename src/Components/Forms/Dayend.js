@@ -19,10 +19,10 @@ function Dayend() {
     const[EW,setEW] = useState('');
     const [MQTY,setMQTY] = useState('')
     const [ExistBN,setExistBN]  = useState([])
+    const [DWeight,SetDweight] = useState();
     const [hid,setHid] = useState(true)
-    const [team,setTeam] = useState([])
-    const [boxNdata,setBoxNdata] = useState([])
-    const [BoxNoCurrentData,setBoxNoCurrentData] =useState([])
+    const [team,setTeam] = useState([]);
+    const [process,SetProcess] = useState('')
     const material_qty = EW-2.700
     const [batchCode,setBatchcode] = useState('')
 
@@ -51,13 +51,13 @@ function Dayend() {
 
 
 
-      const get_BN_data = () => {
-      for(let i=0;i<boxNdata.length;i++){ 
-        if(boxNdata[i].boxRef == BN){
-        setBoxNoCurrentData([boxNdata[i]])
-       }
-      }}
-      console.log(BoxNoCurrentData)
+      // const get_BN_data = () => {
+      // for(let i=0;i<boxNdata.length;i++){ 
+      //   if(boxNdata[i].boxRef == BN){
+      //   setBoxNoCurrentData([boxNdata[i]])
+      //  }
+      // }}
+      // console.log(BoxNoCurrentData)
 
 
 
@@ -71,7 +71,11 @@ function Dayend() {
           },
         })
         .then((response) => {
-        //   console.log(response.data);
+          console.log(response.data);
+          setBatchcode(response.data[0].BatchNo);
+          setBN(response.data[1].BoxNo)
+          SetProcess(response.data[2].endProcess)
+          SetDweight(response.data[2].EndMQnty)
      
           
         })
@@ -150,13 +154,13 @@ const data = [{
 
             <Form.Group as={Col} controlId="formGridVenue">
               <Form.Label>Box Number</Form.Label>
-              <Form.Select
-              onClick={get_BN_data}
-                onChange={(e) => setBN(e.target.value) }
-                defaultValue={BN}
-              >
-                {option}
-              </Form.Select>
+              <Form.Control
+              value={BN?(
+                BN
+              ):(
+                "Please complete a Day start of any box "
+              )}
+              />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridTQC">
               <Form.Label style={{ width: "200px" }}>
@@ -165,7 +169,7 @@ const data = [{
               <Form.Control
                 onChange={''}
                 type="process"
-                value={""}
+                value={process}
               />
             </Form.Group>
           </Row>

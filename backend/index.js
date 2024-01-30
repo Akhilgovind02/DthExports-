@@ -307,11 +307,18 @@ app.get("/daystart", async (req, res) => {
 app.post("/daystartpost", async (req, res) => {
   try {
     const daystartData = req.body.body;
-    console.log(daystartData.material_qty);
+
+    let DaystartBCBN = await DayStart.find({batchNumber:daystartData.Batch_Code,boxNum:daystartData.Box_No})
 
 
-    
-
+    if(DaystartBCBN){
+      await TheDayStart.updateOne({
+        team: daystartData.workers,
+        imagePath:daystartData.image,
+        materialQTY: daystartData.material_qty,
+      });   
+     }
+  else{
     await TheDayStart.create({
       batchNumber: daystartData.Batch_Code,
       boxNum: daystartData.Box_No,
@@ -320,6 +327,7 @@ app.post("/daystartpost", async (req, res) => {
       imagePath:daystartData.image,
       materialQTY: daystartData.material_qty,
     });
+  }
   } catch {
     console.log("error in post request");
   }
@@ -335,11 +343,14 @@ app.post("/daystartpost", async (req, res) => {
 app.get('/dayend', async (req,res) => {
   try{
     let DaystartgetData = await DayStart.find({});
-    console.log(DaystartgetData);
-
-    if(DaystartgetData){
-
-    }
+    console.log(DaystartgetData[0].batchNumber);
+    return res.json([
+      {BatchNo:DaystartgetData[0].batchNumber},
+      {BoxNo:DaystartgetData[0].boxNum},
+      {endProcess:DaystartgetData[0].process},
+      {workersEnd:DaystartgetData[0].team},
+      {EndMQnty:DaystartgetData[0].materialQTY}
+    ]);
   }catch{
     console.log('Error In Fetching Data From Database');
   }
