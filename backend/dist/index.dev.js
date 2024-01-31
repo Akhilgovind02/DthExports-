@@ -642,8 +642,10 @@ app.post("/daystartpost", function _callee9(req, res) {
 
           _context10.next = 8;
           return regeneratorRuntime.awrap(TheDayStart.updateOne({
+            batchNumber: daystartData.Batch_Code,
+            boxNum: daystartData.Box_No,
+            process: daystartData.process,
             team: daystartData.workers,
-            imagePath: daystartData.image,
             materialQTY: daystartData.material_qty
           }));
 
@@ -658,7 +660,6 @@ app.post("/daystartpost", function _callee9(req, res) {
             boxNum: daystartData.Box_No,
             process: daystartData.Process_,
             team: daystartData.workers,
-            imagePath: daystartData.image,
             materialQTY: daystartData.material_qty
           }));
 

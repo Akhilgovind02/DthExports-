@@ -17,6 +17,7 @@ function Dayend() {
 
     const[BN,setBN] = useState('Select Box Number...');
     const[EW,setEW] = useState('');
+    const [Bdisabled,seyBdisabled] = useState(true);
     const [MQTY,setMQTY] = useState('')
     const [ExistBN,setExistBN]  = useState([])
     const [DWeight,SetDweight] = useState();
@@ -59,6 +60,12 @@ function Dayend() {
       // }}
       // console.log(BoxNoCurrentData)
 
+      console.log(material_qty)
+      let BalanceW = DWeight
+      if(EW.length>0){
+        BalanceW -= material_qty
+      }
+      // console.log(BalanceW)
 
 
 
@@ -75,7 +82,7 @@ function Dayend() {
           setBatchcode(response.data[0].BatchNo);
           setBN(response.data[1].BoxNo)
           SetProcess(response.data[2].endProcess)
-          SetDweight(response.data[2].EndMQnty)
+          SetDweight(response.data[4].EndMQnty)
      
           
         })
@@ -192,10 +199,14 @@ const data = [{
               onChange={(e)=>setMQTY(material_qty)}
               value={
                   EW ?(
-                    isNaN(material_qty) ?(
+                    isNaN(material_qty ) ?(
                       "please Enter a Valid Number"
                     ):
-                    material_qty+"kg"
+                    material_qty>0 ?(
+                      material_qty + "kg"
+                    ):(
+                      "Please enter a posible number"
+                    )
                   ):(
                     "Please Enter Weight"
                   )
@@ -208,7 +219,8 @@ const data = [{
                 Balance
               </Form.Label>
               <Form.Control
-                onChange={(e) => setEW(e.target.value)}
+                onChange={''}
+                value={BalanceW }
                 type="balance"
                 placeholder='Enter Balance'
               />
@@ -218,7 +230,7 @@ const data = [{
                 Total Percentage Waste 
               </Form.Label>
               <Form.Control
-                onChange={(e) => setEW(e.target.value)}
+                onChange={''}
                 type="balance"
                 placeholder='Total Percentage waste '
               />
@@ -241,11 +253,11 @@ const data = [{
             )
         }
       <Row className='mx-5 my-2'>
-      <Button as={Col} onClick={capture} hidden={hid} className='mt-2 mx-1'>
+      <Button  as={Col} onClick={capture} hidden={hid} className='mt-2 mx-1'>
           Capture
         </Button>
-        <Button id='btn1' onClick={click} as={Col} className='mt-2 mx-1'>
-          Click
+        <Button hidden={Bdisabled} id='btn1' onClick={click} as={Col} className='mt-2 mx-1'>
+          Process Completed
         </Button>
       </Row>
 

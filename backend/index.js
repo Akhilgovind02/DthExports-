@@ -313,8 +313,10 @@ app.post("/daystartpost", async (req, res) => {
 
     if(DaystartBCBN){
       await TheDayStart.updateOne({
+        batchNumber:daystartData.Batch_Code,
+        boxNum:daystartData.Box_No,
+        process:daystartData.process,
         team: daystartData.workers,
-        imagePath:daystartData.image,
         materialQTY: daystartData.material_qty,
       });   
      }
@@ -324,12 +326,11 @@ app.post("/daystartpost", async (req, res) => {
       boxNum: daystartData.Box_No,
       process: daystartData.Process_,
       team: daystartData.workers,
-      imagePath:daystartData.image,
       materialQTY: daystartData.material_qty,
     });
   }
   } catch {
-    console.log("error in post request");
+    console.log("error in post request"); 
   }
 });
 
@@ -338,6 +339,7 @@ app.post("/daystartpost", async (req, res) => {
 
 
 //Day end start
+
 
 
 app.get('/dayend', async (req,res) => {
