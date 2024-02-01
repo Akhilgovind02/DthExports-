@@ -17,7 +17,7 @@ function Dayend() {
 
     const[BN,setBN] = useState('Select Box Number...');
     const[EW,setEW] = useState('');
-    const [Bdisabled,seyBdisabled] = useState(true);
+    const [Bdisabled,setBdisabled] = useState(true);
     const [MQTY,setMQTY] = useState('')
     const [ExistBN,setExistBN]  = useState([])
     const [DWeight,SetDweight] = useState();
@@ -26,6 +26,7 @@ function Dayend() {
     const [process,SetProcess] = useState('')
     const material_qty = EW-2.700
     const [batchCode,setBatchcode] = useState('')
+    const [baHide,setBahide] = useState(true);
 
     const option = [];
 
@@ -50,6 +51,10 @@ function Dayend() {
         setImage(imageSrc);
     },[webcamRef])
 
+
+    const disable = () => {
+      setBdisabled(false);
+    }
 
 
       // const get_BN_data = () => {
@@ -181,7 +186,7 @@ const data = [{
             </Form.Group>
           </Row>
           <Row>
-          <Form.Group className='mt-4' as={Col} controlId="formGridTQC">
+          <Form.Group  className='mt-4' as={Col} controlId="formGridTQC">
               <Form.Label style={{ width: "400px" }}>
                 Enter Weight Shown in the Screen
               </Form.Label>
@@ -191,7 +196,7 @@ const data = [{
                 placeholder='Enter Weight'
               />
             </Form.Group>
-            <Form.Group className='mt-4' as={Col} controlId="formGridTQC">
+            <Form.Group  className='mt-4' as={Col} controlId="formGridTQC">
               <Form.Label style={{ width: "200px" }}>
                 Material Quantity 
               </Form.Label>
@@ -214,7 +219,7 @@ const data = [{
                 type="process"
               />
             </Form.Group>
-            <Form.Group className='mt-4' as={Col} controlId="formGridTQC">
+            <Form.Group hidden={baHide} className='mt-4' as={Col} controlId="formGridTQC">
               <Form.Label style={{ width: "200px" }}>
                 Balance
               </Form.Label>
@@ -225,7 +230,7 @@ const data = [{
                 placeholder='Enter Balance'
               />
             </Form.Group>
-            <Form.Group className='mt-4' as={Col} controlId="formGridTQC">
+            <Form.Group hidden={baHide} className='mt-4' as={Col} controlId="formGridTQC">
               <Form.Label style={{ width: "200px" }}>
                 Total Percentage Waste 
               </Form.Label>
@@ -236,9 +241,9 @@ const data = [{
               />
             </Form.Group>
             </Row>
-            <Row  className='mt-2'>
-            <h2 className='mb-3'>Team</h2>
-            <Table columns={columns} dataSource={data} pagination={false} />
+            <Row hidden={baHide}  className='mt-2'>
+            <h2  className='mb-3'>Team</h2>
+            <Table dataSource={data} pagination={false} />
             </Row>
         </Form>
         {
@@ -253,11 +258,12 @@ const data = [{
             )
         }
       <Row className='mx-5 my-2'>
+      <Button className='mt-2 mx-1' onClick={disable}>Process Finished</Button>
       <Button  as={Col} onClick={capture} hidden={hid} className='mt-2 mx-1'>
           Capture
         </Button>
         <Button hidden={Bdisabled} id='btn1' onClick={click} as={Col} className='mt-2 mx-1'>
-          Process Completed
+          Click
         </Button>
       </Row>
 
