@@ -9,9 +9,9 @@ const check = require("./Models/Item_Check");
 const Accept = require("./Models/item_accept_temp");
 const Acceptperm = require("./Models/item_accept_perm");
 const ProdBCBN_temp = require("./Models/prod_BC_BN_temp");
-const TheDayStart = require('./Models/daystart');
+const DayStart = require('./Models/daystart');
 const process_temp = require("./Models/processTemp");
-const DayStart = require("./Models/daystart");
+const DayEndTemp = require('./Models/dayendtemp');
 
 const app = express();
 const port = 2500;
@@ -238,7 +238,7 @@ app.post("/getprocess", async (req, res) => {
   try {
     const Cprocess = req.body.body.Process_;
     let currentPRocess = await process_temp.find({ currentprocess: Cprocess });
-    if (currentPRocess) {
+    if (currentPRocess.length>0) {
       console.log("it already exists");
     } else {
       await process_temp.create({
@@ -306,27 +306,43 @@ app.get("/daystart", async (req, res) => {
 
 app.post("/daystartpost", async (req, res) => {
   try {
+
     const daystartData = req.body.body;
 
-    let DaystartBCBN = await DayStart.find({batchNumber:daystartData.Batch_Code,boxNum:daystartData.Box_No})
+
+    // let DaystartBCBN
 
 
-    if(DaystartBCBN){
-      await TheDayStart.updateOne({
+    // if(TheDayStart.length>0){
+     let DaystartBCBN = await DayStart.find({batchNumber:daystartData.Batch_Code,boxNum:daystartData.Box_No})
+      console.log(DaystartBCBN.length)
+    // }
+
+
+
+
+
+
+    if(DaystartBCBN.length==0){
+      await DayStart.create({
         batchNumber:daystartData.Batch_Code,
         boxNum:daystartData.Box_No,
-        process:daystartData.process,
+        process:daystartData.Process_,
         team: daystartData.workers,
         materialQTY: daystartData.material_qty,
+        imagePath: daystartData.image,
+        updatedAt:daystartData.updatedAt
       });   
      }
   else{
-    await TheDayStart.create({
+    await DayStart.updateOne({
       batchNumber: daystartData.Batch_Code,
       boxNum: daystartData.Box_No,
       process: daystartData.Process_,
       team: daystartData.workers,
       materialQTY: daystartData.material_qty,
+      imagePath: daystartData.image,
+      updatedAt:daystartData.updatedAt
     });
   }
   } catch {
@@ -359,6 +375,27 @@ app.get('/dayend', async (req,res) => {
 
 })
 
+app.post('/DayendTempPost', async(req,res) =>{
+  try{
+    let DayEndTempData = req.body.body;
+    console.log(DayEndTempData.Batch_Code)
+    await DayEndTemp.create({
+    batchNumber :DayEndTempData.Batch_Code,
+    boxNum : DayEndTempData.Box_No,
+    process:DayEndTempData.Process_,
+    materialQTY: DayEndTempData.material_qty,
+    updatedAt: DayEndTempData.UpdatedAt
+    })
+  }catch{
+    console.log("Error in Adding data to the database");
+  }
+})
+
+
+
+app.post('/finishBox',(req,res)=> {
+  
+})
 
 //Day end endss
 

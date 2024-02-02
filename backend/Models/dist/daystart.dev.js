@@ -30,8 +30,11 @@ var Daystartschema = new mongoose.Schema({
   createdAt: {
     type: Date,
     "default": Date.now
-  } // updatedAt: { type: String, default: null },
-
+  },
+  updatedAt: {
+    type: String,
+    "default": null
+  }
 });
 var DayStart = mongoose.model('Daystart', Daystartschema);
 module.exports = DayStart;

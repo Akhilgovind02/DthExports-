@@ -22,11 +22,11 @@ var Acceptperm = require("./Models/item_accept_perm");
 
 var ProdBCBN_temp = require("./Models/prod_BC_BN_temp");
 
-var TheDayStart = require('./Models/daystart');
+var DayStart = require('./Models/daystart');
 
 var process_temp = require("./Models/processTemp");
 
-var DayStart = require("./Models/daystart");
+var DayEndTemp = require('./Models/dayendtemp');
 
 var app = express();
 var port = 2500;
@@ -464,7 +464,7 @@ app.post("/getprocess", function _callee7(req, res) {
         case 4:
           currentPRocess = _context8.sent;
 
-          if (!currentPRocess) {
+          if (!(currentPRocess.length > 0)) {
             _context8.next = 9;
             break;
           }
@@ -625,7 +625,9 @@ app.post("/daystartpost", function _callee9(req, res) {
       switch (_context10.prev = _context10.next) {
         case 0:
           _context10.prev = 0;
-          daystartData = req.body.body;
+          daystartData = req.body.body; // let DaystartBCBN
+          // if(TheDayStart.length>0){
+
           _context10.next = 4;
           return regeneratorRuntime.awrap(DayStart.find({
             batchNumber: daystartData.Batch_Code,
@@ -634,50 +636,55 @@ app.post("/daystartpost", function _callee9(req, res) {
 
         case 4:
           DaystartBCBN = _context10.sent;
+          console.log(DaystartBCBN.length); // }
 
-          if (!DaystartBCBN) {
-            _context10.next = 10;
+          if (!(DaystartBCBN.length == 0)) {
+            _context10.next = 11;
             break;
           }
 
-          _context10.next = 8;
-          return regeneratorRuntime.awrap(TheDayStart.updateOne({
-            batchNumber: daystartData.Batch_Code,
-            boxNum: daystartData.Box_No,
-            process: daystartData.process,
-            team: daystartData.workers,
-            materialQTY: daystartData.material_qty
-          }));
-
-        case 8:
-          _context10.next = 12;
-          break;
-
-        case 10:
-          _context10.next = 12;
-          return regeneratorRuntime.awrap(TheDayStart.create({
+          _context10.next = 9;
+          return regeneratorRuntime.awrap(DayStart.create({
             batchNumber: daystartData.Batch_Code,
             boxNum: daystartData.Box_No,
             process: daystartData.Process_,
             team: daystartData.workers,
-            materialQTY: daystartData.material_qty
+            materialQTY: daystartData.material_qty,
+            imagePath: daystartData.image,
+            updatedAt: daystartData.updatedAt
           }));
 
-        case 12:
-          _context10.next = 17;
+        case 9:
+          _context10.next = 13;
           break;
 
-        case 14:
-          _context10.prev = 14;
+        case 11:
+          _context10.next = 13;
+          return regeneratorRuntime.awrap(DayStart.updateOne({
+            batchNumber: daystartData.Batch_Code,
+            boxNum: daystartData.Box_No,
+            process: daystartData.Process_,
+            team: daystartData.workers,
+            materialQTY: daystartData.material_qty,
+            imagePath: daystartData.image,
+            updatedAt: daystartData.updatedAt
+          }));
+
+        case 13:
+          _context10.next = 18;
+          break;
+
+        case 15:
+          _context10.prev = 15;
           _context10.t0 = _context10["catch"](0);
           console.log("error in post request");
 
-        case 17:
+        case 18:
         case "end":
           return _context10.stop();
       }
     }
-  }, null, null, [[0, 14]]);
+  }, null, null, [[0, 15]]);
 }); //Day start end
 //Day end start
 
@@ -717,7 +724,42 @@ app.get('/dayend', function _callee10(req, res) {
       }
     }
   }, null, null, [[0, 8]]);
-}); //Day end endss
+});
+app.post('/DayendTempPost', function _callee11(req, res) {
+  var DayEndTempData;
+  return regeneratorRuntime.async(function _callee11$(_context12) {
+    while (1) {
+      switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.prev = 0;
+          DayEndTempData = req.body.body;
+          console.log(DayEndTempData.Batch_Code);
+          _context12.next = 5;
+          return regeneratorRuntime.awrap(DayEndTemp.create({
+            batchNumber: DayEndTempData.Batch_Code,
+            boxNum: DayEndTempData.Box_No,
+            process: DayEndTempData.Process_,
+            materialQTY: DayEndTempData.material_qty,
+            updatedAt: DayEndTempData.UpdatedAt
+          }));
+
+        case 5:
+          _context12.next = 10;
+          break;
+
+        case 7:
+          _context12.prev = 7;
+          _context12.t0 = _context12["catch"](0);
+          console.log("Error in Adding data to the database");
+
+        case 10:
+        case "end":
+          return _context12.stop();
+      }
+    }
+  }, null, null, [[0, 7]]);
+});
+app.post('/finishBox', function (req, res) {}); //Day end endss
 
 app.listen(port, function () {
   return console.log("Server is running");

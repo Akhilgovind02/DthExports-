@@ -53,7 +53,7 @@
               <Row className="row">
                 <Col className="col1">
                     <Row  sm="12" md="10" lg="3" className="row1">
-                    <Image className="logo" src={Logo}></Image>
+                    {/* <Image className="logo" src={Logo}></Image> */}
                     </Row>
                   <Row className="row2">
                   <Form className="frm" >

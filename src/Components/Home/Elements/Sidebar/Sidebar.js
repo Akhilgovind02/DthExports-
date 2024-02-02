@@ -39,8 +39,8 @@ function Sidebar() {
             }}
             onClick={toggleMenu}
           >
-            <Image style={{ width: "40px", height: "40px" }} src={logo}></Image>
-          </button>
+            {/* <Image style={{ width: "40px", height: "40px" }} src={logo}></Image> */}
+          <h3>Logo</h3></button>
           <div className={isMenuCollapsed ? styles.collapsed : styles.expanded}>
             <Menu>
               {!isMenuCollapsed && 

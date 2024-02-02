@@ -52,9 +52,8 @@ function Dayend() {
     },[webcamRef])
 
 
-    const disable = () => {
-      setBdisabled(false);
-    }
+
+
 
 
       // const get_BN_data = () => {
@@ -67,10 +66,31 @@ function Dayend() {
 
       console.log(material_qty)
       let BalanceW = DWeight
+      let wasteage = BalanceW
       if(EW.length>0){
         BalanceW -= material_qty
+        wasteage = BalanceW
       }
-      // console.log(BalanceW)
+      console.log(wasteage)
+
+   
+    // let wasteage = BalanceW
+
+    const disable = () => {
+      setBdisabled(false);
+      setBahide(false);
+      if(BalanceW){
+        if(BalanceW!=0){
+          BalanceW-=wasteage
+        }
+        else{
+          console.log("no Wastage")
+        }
+      }
+      else{
+        alert("No Ether")
+      }
+    }
 
 
 
@@ -99,6 +119,36 @@ function Dayend() {
       useEffect(() => {
         getBatchCode();
       }, []);
+
+      var date = new Date();
+      const updatedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}:${date.getMinutes()}`;
+
+      const DayendPost = () => {
+        axios
+        .post("http://localhost:2500/DayendTempPost", {
+          headers: {
+            "Content-Type": "application/text",
+          },
+          body:{
+            'Batch_Code' : batchCode,
+            'Box_No' : BN,
+            'Process_' : process,
+            'material_qty':material_qty,
+            'UpdatedAt':updatedDate,
+          }
+        })
+        .then((response) => {
+          alert('Data Submitted Successfully')
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          // setError("Error fetching data:");
+        });
+        window.location.reload();
+      }
+    
+
+
 
 
 
@@ -269,7 +319,7 @@ const data = [{
 
       <Row className='mx-5 my-2'>
        
-        <Button onClick={''} as={Col} className='mt-2 mx-1'>
+        <Button onClick={DayendPost} as={Col} className='mt-2 mx-1'>
           Submit  
         </Button>
       </Row>

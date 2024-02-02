@@ -112,8 +112,9 @@ function Daystart() {
         setBoxNoCurrentData([boxNdata[i]])
        }
       }}
-      console.log(BoxNoCurrentData)
 
+      var date = new Date();
+      const updatedDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${date.getHours()}:${date.getMinutes()}`;
 
 
       const postdaystart = () => {
@@ -128,7 +129,8 @@ function Daystart() {
             'Process_' : process,
             'workers':team,
             'material_qty':material_qty,
-            'image':image
+            'image':image,
+            'UpdatedAt':updatedDate
           }
         })
         .then((response) => {
