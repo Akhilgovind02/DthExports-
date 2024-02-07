@@ -71,17 +71,27 @@ function Dayend() {
         BalanceW -= material_qty
         wasteage = BalanceW
       }
-      console.log(wasteage)
+      console.log('wasteage before',wasteage)
 
    
     // let wasteage = BalanceW
 
+
+
+    let WastagePercentage = (wasteage/DWeight)*100
+    WastagePercentage = Math.round(WastagePercentage*100)/100
+
+
+
+    let LastBalance = 0;
     const disable = () => {
       setBdisabled(false);
       setBahide(false);
       if(BalanceW){
         if(BalanceW!=0){
-          BalanceW-=wasteage
+          LastBalance= BalanceW-wasteage;
+
+          console.log('balance',LastBalance);
         }
         else{
           console.log("no Wastage")
@@ -275,7 +285,11 @@ const data = [{
               </Form.Label>
               <Form.Control
                 onChange={''}
-                value={BalanceW }
+                value={BalanceW == 0 ?(
+                  BalanceW
+                ):(
+                  LastBalance
+                )}
                 type="balance"
                 placeholder='Enter Balance'
               />
@@ -285,7 +299,11 @@ const data = [{
                 Total Percentage Waste 
               </Form.Label>
               <Form.Control
-                onChange={''}
+                value={WastagePercentage == 0?(
+                  WastagePercentage+"%"
+                ):(
+                  WastagePercentage+"%"
+                )}
                 type="balance"
                 placeholder='Total Percentage waste '
               />
